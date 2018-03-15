@@ -7,7 +7,7 @@ const restaurantSchema = mongoose.Schema({
   zagat_food_rating: Number,
   review_count: Number,
   // array of urls
-  photos: [String],
+  photos: Array,
   short_description: String,
   neighborhood: String,
   location: { lat: Number, long: Number },
@@ -15,9 +15,9 @@ const restaurantSchema = mongoose.Schema({
   website: String,
   price_level: Number,
   // array of words
-  types: [String],
+  types: Array,
   // array of ids
-  nearby: [Number],
+  nearby: Array,
 });
 
 const RestaurantModel = mongoose.model('Restaurant', restaurantSchema);

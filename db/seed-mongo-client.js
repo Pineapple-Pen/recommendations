@@ -1,15 +1,9 @@
-const mongoose = require('mongoose');
-mongoose.Promise = require('bluebird');
+const { MongoClient } = require('mongodb');
 const faker = require('faker');
 const random = require('random-ext');
-const Restaurants = require('./models/new-restaurant');
 
 const dbAddress = process.env.DB_ADDRESS || 'localhost';
 const url = `mongodb://${dbAddress}/wegot`;
-mongoose.connect(url, { useMongoClient: true });
-
-const db = mongoose.connection;
-db.on('error', () => console.error('Error connecting to MongoDB'));
 
 const limit = 10000;
 let id = 0;
@@ -67,36 +61,42 @@ const generateArray = () => {
   return documents;
 };
 
-const writeToDb = () => {
+const writeToDb = (collection) => {
   const docs = generateArray();
-  return Restaurants.RestaurantModel.insertMany(docs);
+  return collection.insertMany(docs);
 };
 
-const chainWrites = async () => {
+const chainWrites = async (collection) => {
   for (let i = 0; i < 1000; i += 1) {
-    await writeToDb();
+    await writeToDb(collection);
   }
 };
 
-db.on('open', () => {
-  console.log('Connected to MongoDB!');
+MongoClient.connect(url, (err, client) => {
+  if (err) {
+    console.error(err);
+  }
+  console.log('Connected to MongoDB ...');
   const start = process.hrtime();
 
-  Restaurants.RestaurantModel.count()
+  const db = client.db('wegot');
+
+  const collection = db.collection('restaurants');
+  collection.count()
     .then((count) => {
       // console.log('Items in DB: ', count);
       if (count !== 0) {
         console.log('Drop current database before attempting to re-seed.');
-        db.close();
+        client.close();
         const end = process.hrtime(start);
         console.log(`${end}`);
       } else {
         // seedDb will have to return a promise
 
-        chainWrites()
+        chainWrites(collection)
           .then(() => {
             console.log('Seeding complete.');
-            db.close();
+            client.close();
             const end = process.hrtime(start);
             console.log(`${end}`);
           })
