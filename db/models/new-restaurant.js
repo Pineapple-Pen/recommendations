@@ -1,23 +1,26 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var restaurantSchema = mongoose.Schema({
+const restaurantSchema = mongoose.Schema({
   name: String,
-  place_id: { type: String, unique: true },
+  place_id: { type: Number, unique: true },
   google_rating: Number,
   zagat_food_rating: Number,
   review_count: Number,
+  // array of urls
   photos: [String],
   short_description: String,
   neighborhood: String,
   location: { lat: Number, long: Number },
-  address: String, 
+  address: String,
   website: String,
   price_level: Number,
+  // array of words
   types: [String],
-  nearby: [String]
+  // array of ids
+  nearby: [Number],
 });
 
-var RestaurantModel = mongoose.model('Restaurant', restaurantSchema);
+const RestaurantModel = mongoose.model('Restaurant', restaurantSchema);
 
 // findAll retrieves all stories
 function findAll(callback) {
@@ -27,8 +30,8 @@ function findAll(callback) {
 
 // findOne will retrieve the restaurant associated with the given id
 function findOne(id, callback) {
-  console.log("find " + id);
-  RestaurantModel.find({place_id: id}, callback);
+  console.log(`find ${id}`);
+  RestaurantModel.find({ place_id: id }, callback);
   // RestaurantModel.find({place_id: 'ChIJFUBxSY6AhYARwOaLV7TsLjw'}, callback);
 }
 
@@ -41,11 +44,7 @@ function insertOne(restaurant, callback) {
 // retrieve many restaurants
 function findMany(ids, callback) {
   console.log('FIND THESE IN DB: ', ids);
-  RestaurantModel.find({place_id: {$in: ids}}, callback);
-}
-
-function count(){
-  return RestaurantModel.count();
+  RestaurantModel.find({ place_id: { $in: ids } }, callback);
 }
 
 exports.RestaurantModel = RestaurantModel;
@@ -53,4 +52,3 @@ exports.findOne = findOne;
 exports.findAll = findAll;
 exports.insertOne = insertOne;
 exports.findMany = findMany;
-exports.count = count;

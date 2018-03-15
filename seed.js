@@ -1,4 +1,6 @@
-// var restData = require('./seed_data.js');
+/* eslint-disable */
+
+// var data = require('./seed_data.js');
 var data = require('./allData.js');
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
@@ -12,7 +14,7 @@ mongoose.connect(uri, { useMongoClient: true });
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error: '));
-db.once('open', () => {
+db.on('open', () => {
   console.log('Connected to DB!');
 
   //seed database if collection count = 0
@@ -34,17 +36,17 @@ db.once('open', () => {
 });
 
 
-async function getRestaurants(restData) {
+async function getRestaurants(data) {
   console.log('Seeding database...');
 
   var response;
   var photosURLArray = [];
   var googlePhotoURL = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400';
 
-  for(var i = 0; i < restData.length; i++){
+  for(var i = 0; i < data.length; i++){
     var photoRes;
-    var rest = restData[i];
-    var result = restData[i].result;
+    var rest = data[i];
+    var result = data[i].result;
     // console.log("Number of photos: ", result.photos.length);
     var photosURLArray = [];
     var photos = result.photos;
@@ -89,7 +91,7 @@ async function getRestaurants(restData) {
     });
 
     //get nearby restaurants
-    var resObj = restData.slice();
+    var resObj = data.slice();
     resObj.sort((r1, r2) => {
       var d1 = distance(rest, r1);
       var d2 = distance(rest, r2);
@@ -136,7 +138,7 @@ async function getRestaurants(restData) {
   }
 }
 
-// getRestaurants(restData).then(()=> {
+// getRestaurants(data).then(()=> {
 //   console.log('goodbye');
 //   mongoose.connection.close();
 // });
