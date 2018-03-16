@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 const { MongoClient } = require('mongodb');
 const faker = require('faker');
 const random = require('random-ext');
@@ -53,7 +54,7 @@ const generateDocument = (id) => {
 
 const generateArray = () => {
   const documents = [];
-  for (let i = 0; i < 100; i += 1) {
+  for (let i = 0; i < 1000; i += 1) {
     const item = generateDocument(id);
     documents.push(item);
     id += 1;
@@ -67,7 +68,7 @@ const writeToDb = (collection) => {
 };
 
 const chainWrites = async (collection) => {
-  for (let i = 0; i < 1000; i += 1) {
+  for (let i = 0; i < 100; i += 1) {
     await writeToDb(collection);
   }
 };
