@@ -6,7 +6,7 @@ const _ = require('ramda');
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length; // 8
 
-const SEED_LIMIT = 100000;
+const SEED_LIMIT = 10000000;
 
 // FUNCTION DEFINITIONS:
 const generateDocument = (id) => {
@@ -70,7 +70,7 @@ function seedDB() {
     const db = client.db('wegot');
     const collection = db.collection('restaurants');
 
-    let count = parseInt((SEED_LIMIT / numCPUs), 10); // on my machine this will yeild 500,000
+    let count = parseInt((SEED_LIMIT / numCPUs), 10);
     const size = 1000;
 
     async function insertBulk() {
