@@ -96,6 +96,7 @@ MongoClient.connect(url, (err, client) => {
 
         chainWrites(collection)
           .then(() => {
+            console.log(`Populated DB with ${limit} items`);
             console.log('Seeding complete.');
             client.close();
             const end = process.hrtime(start);

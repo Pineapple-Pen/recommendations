@@ -10,7 +10,6 @@
   "scripts": {
     "server": "nodemon ./server/index.js",
     "react-dev": "webpack -d --watch",
-    "database": "mongod",
     "fec-seed": "node seed.js",
     "sdc-seed": "node ./db/new-seed.js",
     "test": "jest",

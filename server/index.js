@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const cors = require('cors');
 
-const restaurants = require('../db/models/restaurant.js');
+const restaurants = require('../db/models/new-restaurant.js');
 const mongoose = require('mongoose');
 
 // const dbAddress = process.env.DB_ADDRESS || 'localhost';

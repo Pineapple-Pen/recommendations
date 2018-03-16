@@ -91,7 +91,7 @@ function seedDB() {
   });
 }
 
-// CODE THAT WILL RUN:
+// RUN SEED PROCESSES:
 if (cluster.isMaster) {
   console.log(`Master process ${process.pid} is running`);
 
@@ -102,7 +102,7 @@ if (cluster.isMaster) {
   }
 
   cluster.on('exit', (worker, code, signal) => {
-    console.log(`worker ${worker.process.pid} finished`);
+    console.log(`Worker ${worker.process.pid} finished`);
   });
 } else {
   seedDB();
