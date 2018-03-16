@@ -1,26 +1,26 @@
 import React from 'react';
-import ReactDOM  from 'react-dom';
-import RestaurantCard from './components/RestaurantCard.jsx'
+import ReactDOM from 'react-dom';
+import RestaurantCard from './components/RestaurantCard.jsx';
 import $ from 'jquery';
 import '../dist/styles.css';
 
-class App extends React.Component{
-  constructor(props){
+class App extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {
       recommended: [],
-      restaurant: null
-    }
+      restaurant: null,
+    };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.getRecommendedRestaurants();
   }
 
-  getRecommendedRestaurants(){
-    // console.log(window.location.href);
-    var id = window.location.href.split('/')[4];
-    console.log('getting recommended restaurants for id: ' + id)
+  getRecommendedRestaurants() {
+    console.log(window.location.href);
+    let id = window.location.href.split('/')[4] || 0;
+    console.log(`getting recommended restaurants for id: ${id}`);
 
     $.ajax({
       url: `/api/restaurants/${id}/recommendations`,
@@ -29,31 +29,31 @@ class App extends React.Component{
         console.log('get success from client!', data);
         this.setState({
           restaurant: data[0],
-          recommended: data[1]
+          recommended: data[1],
         });
       },
       error: (data) => {
         console.log('get error from client!', data);
-      }
-    })
+      },
+    });
   }
 
-  goToRestaurant(id){
-    console.log('go to restaurant ' + id)
-    location.href = '/restaurants/' + id;
+  goToRestaurant(id) {
+    console.log(`go to restaurant ${id}`);
+    location.href = `/restaurants/${id}`;
   }
 
-  render(){
-    return(
+  render() {
+    return (
       <div>
         <div className="recommendations-title">More Restaurants Near {this.state.restaurant ? this.state.restaurant.name : '...'}</div>
         <div className="recommendations-container">
           {this.state.recommended.map((restaurant, index) => (
-            <RestaurantCard restaurant={restaurant} key={index} switchRestaurant={this.goToRestaurant.bind(this)}/>
+            <RestaurantCard restaurant={restaurant} key={index} switchRestaurant={this.goToRestaurant.bind(this)} />
           ))}
         </div>
       </div>
-    )
+    );
   }
 }
 
