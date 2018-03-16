@@ -52,7 +52,7 @@ const generateDocument = (id) => {
   return doc;
 };
 
-let id = process.env.forkID * (SEED_LIMIT * numCPUs);
+let id = process.env.forkID * (SEED_LIMIT / numCPUs);
 const url = 'mongodb://localhost/';
 
 const oneMongoInsert = () => {
