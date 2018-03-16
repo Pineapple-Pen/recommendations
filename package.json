@@ -11,7 +11,7 @@
     "server": "nodemon ./server/index.js",
     "react-dev": "webpack -d --watch",
     "fec-seed": "node seed.js",
-    "sdc-seed": "node ./db/new-seed.js",
+    "sdc-seed-mongo": "node ./db/mongo/seed-optimize-cpu.js",
     "test": "jest",
     "start": "node ./server/index.js",
     "dockertest": "npm run seed-database && npm start",
