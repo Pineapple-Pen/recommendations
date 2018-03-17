@@ -4,7 +4,7 @@ const faker = require('faker');
 const random = require('random-ext');
 const _ = require('ramda');
 const cluster = require('cluster');
-const numCPUs = require('os').cpus().length; // 8
+const numCPUs = require('os').cpus().length;
 
 const SEED_LIMIT = 10000000;
 
