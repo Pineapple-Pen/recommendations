@@ -13,6 +13,8 @@ const generateRestaurantTypes = () => {
   return _.keys(uniqueTypes);
 };
 
+const restaurantTypes = generateRestaurantTypes();
+
 const makeSingleRestaurant = (id) => {
   const restaurantObj = {
     id,
@@ -39,7 +41,6 @@ const makeSingleRestaurantTypes = (id, typeArray) => {
   return types;
 };
 
-exports.generateRestaurantTypes = generateRestaurantTypes;
+exports.restaurantTypes = restaurantTypes;
 exports.makeSingleRestaurant = makeSingleRestaurant;
 exports.makeSingleRestaurantTypes = makeSingleRestaurantTypes;
-

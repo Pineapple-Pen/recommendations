@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
-const faker = require('faker');
-const random = require('random-ext');
+// const faker = require('faker');
+// const random = require('random-ext');
 const _ = require('ramda');
 
 const cluster = require('cluster');
@@ -9,16 +9,14 @@ const numCPUs = require('os').cpus().length; // 2 on my machine
 const { db, pgp } = require('./db.js');
 const gen = require('./dataGeneration.js');
 
-const SEED_LIMIT = 100000;
+const SEED_LIMIT = 20;
 let id = process.env.forkID * (SEED_LIMIT / numCPUs);
 
 
 // CREATE TYPES TABLE - ONE TIME OPERATION
-const restaurantTypes = gen.generateRestaurantTypes();
-
 const populateTypesTable = () => {
   const restaurantTypeColumnSet = new pgp.helpers.ColumnSet(['id', 'rest_type'], { table: 'types' });
-  const restaurantTypeValues = restaurantTypes.map((type, index) => (
+  const restaurantTypeValues = gen.restaurantTypes.map((type, index) => (
     { id: index, rest_type: type }
   ));
   // generating a multi-row insert query:
@@ -34,10 +32,31 @@ const populateTypesTable = () => {
     });
 };
 
-populateTypesTable();
-
 const seedDb = async () => {
+  const start = process.hrtime();
+  const restaurantColumnSet = new pgp.helpers.ColumnSet(['id', 'rest_name', 'google_rating', 'zagat_food_rating', 'review_count', 'short_description', 'neighborhood', 'rest_address', 'website', 'price_level'], { table: 'restaurants' });
 
+  let count = parseInt((SEED_LIMIT / numCPUs), 10);
+  const size = 5;
+
+  async function insertBulk() {
+    const restaurants = _.range(0, size).map(() => {
+      id += 1;
+      return gen.makeSingleRestaurant(id - 1);
+    });
+
+    const restaurantQuery = pgp.helpers.insert(restaurants, restaurantColumnSet);
+    await db.none(restaurantQuery);
+    count -= size;
+    if (count > 0) {
+      insertBulk();
+    } else {
+      console.log('Done in ', process.hrtime(start));
+      process.exit();
+    }
+  }
+
+  insertBulk();
 };
 
 
@@ -111,20 +130,21 @@ const seedDb = async () => {
 //   });
 
 
-//   // RUN SEED PROCESSES:
-// if (cluster.isMaster) {
-//   console.log(`Master process ${process.pid} is running`);
+// RUN SEED PROCESSES:
+if (cluster.isMaster) {
+  console.log(`Master process ${process.pid} is running`);
+  populateTypesTable();
 
-//   // Fork workers - on my machine this will generate 2
-//   for (let i = 0; i < numCPUs; i += 1) {
-//     cluster.fork({ forkID: i });
-//     // send env variables to fork
-//   }
+  // Fork workers - on my machine this will generate 2
+  for (let i = 0; i < numCPUs; i += 1) {
+    cluster.fork({ forkID: i });
+    // send env variables to fork
+  }
 
-//   cluster.on('exit', (worker, code, signal) => {
-//     console.log(`Worker ${worker.process.pid} finished`);
-//   });
-// } else {
-//   seedDB();
-//   console.log(`Worker ${process.pid} started: Fork ID ${process.env.forkID}`);
-// }
+  cluster.on('exit', (worker, code, signal) => {
+    console.log(`Worker ${worker.process.pid} finished`);
+  });
+} else {
+  seedDb();
+  console.log(`Worker ${process.pid} started: Fork ID ${process.env.forkID}`);
+}
