@@ -6,7 +6,7 @@ const random = require('random-ext');
 const dbAddress = process.env.DB_ADDRESS || 'localhost';
 const url = `mongodb://${dbAddress}/wegot`;
 
-const limit = 10000;
+const limit = 10000000;
 let id = 0;
 
 const generateDocument = (id) => {
@@ -40,13 +40,15 @@ const generateDocument = (id) => {
     ],
     // array of ids
     nearby: [
-      random.integer(limit, 1),
-      random.integer(limit, 1),
-      random.integer(limit, 1),
-      random.integer(limit, 1),
-      random.integer(limit, 1),
-      random.integer(limit, 1),
+      random.integer(9999999, 1),
+      random.integer(9999999, 1),
+      random.integer(9999999, 1),
+      random.integer(9999999, 1),
+      random.integer(9999999, 1),
+      random.integer(9999999, 1),
     ],
+    latitude: faker.address.latitude,
+    longitude: faker.address.longitude,
   };
 
   return doc;

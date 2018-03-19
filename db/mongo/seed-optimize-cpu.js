@@ -4,7 +4,7 @@ const faker = require('faker');
 const random = require('random-ext');
 const _ = require('ramda');
 const cluster = require('cluster');
-const numCPUs = require('os').cpus().length; // 8
+const numCPUs = require('os').cpus().length;
 
 const SEED_LIMIT = 10000000;
 
@@ -40,13 +40,15 @@ const generateDocument = (id) => {
     ],
     // array of ids
     nearby: [
-      random.integer(10000000, 1),
-      random.integer(10000000, 1),
-      random.integer(10000000, 1),
-      random.integer(10000000, 1),
-      random.integer(10000000, 1),
-      random.integer(10000000, 1),
+      random.integer(9999999, 1),
+      random.integer(9999999, 1),
+      random.integer(9999999, 1),
+      random.integer(9999999, 1),
+      random.integer(9999999, 1),
+      random.integer(9999999, 1),
     ],
+    latitude: faker.address.latitude,
+    longitude: faker.address.longitude,
   };
 
   return doc;
