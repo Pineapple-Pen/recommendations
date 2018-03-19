@@ -44,6 +44,13 @@ const makeSingleRestaurantTypes = (id, typeArray) => {
   return types;
 };
 
+const makePhotoURLsforSingleRestaurant = (id) => {
+  const urls = _.range(0, 5).map(() => `https://picsum.photos/590/420?image=${random.integer(1000, 1)}`);
+  return { rest_id: id, photo_urls: urls };
+};
+
 exports.restaurantTypes = restaurantTypes;
 exports.makeSingleRestaurant = makeSingleRestaurant;
 exports.makeSingleRestaurantTypes = makeSingleRestaurantTypes;
+exports.makePhotoURLsforSingleRestaurant = makePhotoURLsforSingleRestaurant;
+

@@ -36,11 +36,13 @@ const seedDb = async () => {
   const start = process.hrtime();
   const restaurantsColumnSet = new pgp.helpers.ColumnSet(['id', 'rest_name', 'google_rating', 'zagat_food_rating', 'review_count', 'short_description', 'neighborhood', 'rest_address', 'website', 'price_level'], { table: 'restaurants' });
   const restaurantTypesColumnSet = new pgp.helpers.ColumnSet(['rest_id', 'description_id'], { table: 'restaurant_types' });
+  const photosColumnSet = new pgp.helpers.ColumnSet(['rest_id', 'photo_urls'], { table: 'photos' });
 
   let count = parseInt((SEED_LIMIT / numCPUs), 10);
   const size = 5;
 
   async function insertBulk() {
+    // write restaurants
     const restaurants = _.range(0, size).map(() => {
       id += 1;
       return gen.makeSingleRestaurant(id - 1);
@@ -51,7 +53,9 @@ const seedDb = async () => {
     // reset id
     id -= size;
 
+
     // Remaining tables depend on restaurant id's, so we write them afterward
+    // Write 5 types per restaurant id
     const restaurantTypes = [];
     for (let i = 0; i < size; i += 1) {
       const randomStartingPoint = random.integer(10, 0);
@@ -63,6 +67,21 @@ const seedDb = async () => {
     const restaurantTypesQuery = pgp.helpers.insert(restaurantTypes, restaurantTypesColumnSet);
     await db.none(restaurantTypesQuery)
       .catch(err => console.log(err));
+    // reset id
+    id -= size;
+
+
+    // write to photos table
+    const photos = _.range(0, size).map(() => {
+      id += 1;
+      return gen.makePhotoURLsforSingleRestaurant(id - 1);
+    });
+    const photosQuery = pgp.helpers.insert(photos, photosColumnSet);
+    await db.none(photosQuery)
+      .catch(err => console.log(err));
+    // reset id
+
+    // write to nearby table
 
     count -= size;
     if (count > 0) {

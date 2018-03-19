@@ -50,7 +50,7 @@ CREATE TABLE nearby(
 
 CREATE TABLE photos(
   rest_id INT,
-  link TEXT,
+  photo_urls text[],
   FOREIGN KEY (rest_id) REFERENCES restaurants (id)
 );
 
