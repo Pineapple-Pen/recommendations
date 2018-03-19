@@ -1,6 +1,7 @@
 /* eslint-disable no-await-in-loop */
+/* eslint-disable max-len */
 // const faker = require('faker');
-// const random = require('random-ext');
+const random = require('random-ext');
 const _ = require('ramda');
 
 const cluster = require('cluster');
@@ -9,9 +10,8 @@ const numCPUs = require('os').cpus().length; // 2 on my machine
 const { db, pgp } = require('./db.js');
 const gen = require('./dataGeneration.js');
 
-const SEED_LIMIT = 20;
+const SEED_LIMIT = 40;
 let id = process.env.forkID * (SEED_LIMIT / numCPUs);
-
 
 // CREATE TYPES TABLE - ONE TIME OPERATION
 const populateTypesTable = () => {
@@ -34,7 +34,8 @@ const populateTypesTable = () => {
 
 const seedDb = async () => {
   const start = process.hrtime();
-  const restaurantColumnSet = new pgp.helpers.ColumnSet(['id', 'rest_name', 'google_rating', 'zagat_food_rating', 'review_count', 'short_description', 'neighborhood', 'rest_address', 'website', 'price_level'], { table: 'restaurants' });
+  const restaurantsColumnSet = new pgp.helpers.ColumnSet(['id', 'rest_name', 'google_rating', 'zagat_food_rating', 'review_count', 'short_description', 'neighborhood', 'rest_address', 'website', 'price_level'], { table: 'restaurants' });
+  const restaurantTypesColumnSet = new pgp.helpers.ColumnSet(['rest_id', 'description_id'], { table: 'restaurant_types' });
 
   let count = parseInt((SEED_LIMIT / numCPUs), 10);
   const size = 5;
@@ -44,9 +45,25 @@ const seedDb = async () => {
       id += 1;
       return gen.makeSingleRestaurant(id - 1);
     });
+    const restaurantQuery = pgp.helpers.insert(restaurants, restaurantsColumnSet);
+    await db.none(restaurantQuery)
+      .catch(err => console.log(err));
+    // reset id
+    id -= size;
 
-    const restaurantQuery = pgp.helpers.insert(restaurants, restaurantColumnSet);
-    await db.none(restaurantQuery);
+    // Remaining tables depend on restaurant id's, so we write them afterward
+    const restaurantTypes = [];
+    for (let i = 0; i < size; i += 1) {
+      const randomStartingPoint = random.integer(10, 0);
+      for (let j = 0; j < 5; j += 1) {
+        restaurantTypes.push({ rest_id: id, description_id: randomStartingPoint + j });
+      }
+      id += 1;
+    }
+    const restaurantTypesQuery = pgp.helpers.insert(restaurantTypes, restaurantTypesColumnSet);
+    await db.none(restaurantTypesQuery)
+      .catch(err => console.log(err));
+
     count -= size;
     if (count > 0) {
       insertBulk();
@@ -87,53 +104,10 @@ const seedDb = async () => {
 //   FOREIGN KEY (rest_id) REFERENCES restaurants (id)
 // );
 
-
-// // You can easily have some 10,000 objects like these:
-// const users = [{ name: 'John', age: 23 }, { name: 'Mike', age: 30 }, { name: 'David', age: 18 }];
-
-// db.tx((t) => {
-//   const queries = users.map(u => t.none('INSERT INTO Users(name, age) VALUES(${name}, ${age})', u));
-//   return t.batch(queries);
-// })
-//   .then((data) => {
-//     // OK
-//   })
-//   .catch((error) => {
-//     // Error
-//   });
-
-// // helpers.insert to build query strings
-// const pgp = require('pg-promise')({
-//   /* initialization options */
-//   capSQL: true // capitalize all generated SQL
-// });
-// const db = pgp(/*connection*/);
-
-// // our set of columns, to be created only once, and then shared/reused,
-// // to let it cache up its formatting templates for high performance:
-// const cs = new pgp.helpers.ColumnSet(['col_a', 'col_b'], {table: 'tmp'});
-
-// // data input values:
-// const values = [{col_a: 'a1', col_b: 'b1'}, {col_a: 'a2', col_b: 'b2'}];
-
-// // generating a multi-row insert query:
-// const query = pgp.helpers.insert(values, cs);
-// //=> INSERT INTO "tmp"("col_a","col_b") VALUES('a1','b1'),('a2','b2')
-
-// // executing the query:
-// db.none(query)
-//   .then(data => {
-//       // success;
-//   })
-//   .catch(error => {
-//       // error;
-//   });
-
-
 // RUN SEED PROCESSES:
 if (cluster.isMaster) {
   console.log(`Master process ${process.pid} is running`);
-  populateTypesTable();
+  populateTypesTable(); // one time operation
 
   // Fork workers - on my machine this will generate 2
   for (let i = 0; i < numCPUs; i += 1) {

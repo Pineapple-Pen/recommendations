@@ -5,12 +5,15 @@ const random = require('random-ext');
 const generateRestaurantTypes = () => {
   const uniqueTypes = {};
 
-  for (let i = 0; i < 30; i += 1) {
+  for (let i = 0; i < 40; i += 1) {
     const type = faker.commerce.product();
     uniqueTypes[type] = true;
   }
-
-  return _.keys(uniqueTypes);
+  const array = _.keys(uniqueTypes).slice(0, 15);
+  if (array.length !== 15) {
+    return generateRestaurantTypes();
+  }
+  return array;
 };
 
 const restaurantTypes = generateRestaurantTypes();
