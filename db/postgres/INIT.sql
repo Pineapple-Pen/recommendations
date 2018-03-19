@@ -15,7 +15,7 @@ CREATE DATABASE wegot;
 \c wegot; 
 
 CREATE TABLE restaurants(
-  id INT PRIMARY KEY NOT NULL,
+  id INT NOT NULL,
   rest_name TEXT,
   google_rating INT,
   zagat_food_rating INT,
@@ -28,29 +28,29 @@ CREATE TABLE restaurants(
 );
 
 CREATE TABLE types(
-  id INT PRIMARY KEY NOT NULL,
+  id INT NOT NULL,
   rest_type TEXT
 );
 
 -- join table for rest and type
 CREATE TABLE restaurant_types(
   rest_id INT,
-  description_id INT,
-  FOREIGN KEY (rest_id) REFERENCES restaurants (id),
-  FOREIGN KEY (description_id) REFERENCES types (id)
+  description_id INT
+  -- FOREIGN KEY (rest_id) REFERENCES restaurants (id),
+  -- FOREIGN KEY (description_id) REFERENCES types (id)
 );
 
 -- join table for rest and rest (nearby)
 CREATE TABLE nearby(
   rest_id INT,
-  nearby_ids INT[],
-  FOREIGN KEY (rest_id) REFERENCES restaurants (id)
+  nearby_ids INT[]
+  -- FOREIGN KEY (rest_id) REFERENCES restaurants (id)
   -- FOREIGN KEY (nearby_id) REFERENCES restaurants (id)
 );
 
 CREATE TABLE photos(
   rest_id INT,
-  photo_urls TEXT[],
-  FOREIGN KEY (rest_id) REFERENCES restaurants (id)
+  photo_url TEXT
+  -- FOREIGN KEY (rest_id) REFERENCES restaurants (id)
 );
 

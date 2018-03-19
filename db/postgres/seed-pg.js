@@ -10,7 +10,7 @@ const numCPUs = require('os').cpus().length; // 2 on my machine
 const { db, pgp } = require('./db.js');
 const gen = require('./dataGeneration.js');
 
-const SEED_LIMIT = 40;
+const SEED_LIMIT = 100000;
 let id = process.env.forkID * (SEED_LIMIT / numCPUs);
 
 // CREATE TYPES TABLE - ONE TIME OPERATION
@@ -36,11 +36,11 @@ const seedDb = async () => {
   const start = process.hrtime();
   const restaurantsColumnSet = new pgp.helpers.ColumnSet(['id', 'rest_name', 'google_rating', 'zagat_food_rating', 'review_count', 'short_description', 'neighborhood', 'rest_address', 'website', 'price_level'], { table: 'restaurants' });
   const restaurantTypesColumnSet = new pgp.helpers.ColumnSet(['rest_id', 'description_id'], { table: 'restaurant_types' });
-  const photosColumnSet = new pgp.helpers.ColumnSet(['rest_id', 'photo_urls'], { table: 'photos' });
+  const photosColumnSet = new pgp.helpers.ColumnSet(['rest_id', 'photo_url'], { table: 'photos' });
   const nearbyRelationsColumnSet = new pgp.helpers.ColumnSet(['rest_id', 'nearby_ids'], { table: 'nearby' });
 
   let count = parseInt((SEED_LIMIT / numCPUs), 10);
-  const size = 5;
+  const size = 1000;
 
   async function insertBulk() {
     // write restaurants
@@ -73,10 +73,14 @@ const seedDb = async () => {
 
 
     // write to photos table
-    const photos = _.range(0, size).map(() => {
+    const photos = [];
+    for (let i = 0; i < size; i += 1) {
+      const randomStartingPoint = random.integer(995, 0);
+      for (let j = 0; j < 5; j += 1) {
+        photos.push({ rest_id: id, photo_url: `https://picsum.photos/590/420?image=${randomStartingPoint + j}`});
+      }
       id += 1;
-      return gen.makePhotoURLsforSingleRestaurant(id - 1);
-    });
+    }
     const photosQuery = pgp.helpers.insert(photos, photosColumnSet);
     await db.none(photosQuery)
       .catch(err => console.log(err));
