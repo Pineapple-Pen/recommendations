@@ -37,6 +37,7 @@ const seedDb = async () => {
   const restaurantsColumnSet = new pgp.helpers.ColumnSet(['id', 'rest_name', 'google_rating', 'zagat_food_rating', 'review_count', 'short_description', 'neighborhood', 'rest_address', 'website', 'price_level'], { table: 'restaurants' });
   const restaurantTypesColumnSet = new pgp.helpers.ColumnSet(['rest_id', 'description_id'], { table: 'restaurant_types' });
   const photosColumnSet = new pgp.helpers.ColumnSet(['rest_id', 'photo_urls'], { table: 'photos' });
+  const nearbyRelationsColumnSet = new pgp.helpers.ColumnSet(['rest_id', 'nearby_ids'], { table: 'nearby' });
 
   let count = parseInt((SEED_LIMIT / numCPUs), 10);
   const size = 5;
@@ -80,8 +81,17 @@ const seedDb = async () => {
     await db.none(photosQuery)
       .catch(err => console.log(err));
     // reset id
+    id -= size;
+
 
     // write to nearby table
+    const nearbyRelations = _.range(0, size).map(() => {
+      id += 1;
+      return gen.makeNearbyRelationsForSingleRestaurant(id - 1);
+    });
+    const nearbyRelationsQuery = pgp.helpers.insert(nearbyRelations, nearbyRelationsColumnSet);
+    await db.none(nearbyRelationsQuery)
+      .catch(err => console.log(err));
 
     count -= size;
     if (count > 0) {
@@ -94,34 +104,6 @@ const seedDb = async () => {
 
   insertBulk();
 };
-
-
-// CREATE TABLE types(
-//   id INT PRIMARY KEY NOT NULL,
-//   rest_type TEXT
-// );
-
-// -- join table for rest and type
-// CREATE TABLE restaurant_types(
-//   rest_id INT,
-//   description_id INT,
-//   FOREIGN KEY (rest_id) REFERENCES restaurants (id),
-//   FOREIGN KEY (description_id) REFERENCES types (id)
-// );
-
-// -- join table for rest and rest (nearby)
-// CREATE TABLE nearby(
-//   rest_id INT,
-//   nearby_id INT,
-//   FOREIGN KEY (rest_id) REFERENCES restaurants (id),
-//   FOREIGN KEY (nearby_id) REFERENCES restaurants (id)
-// );
-
-// CREATE TABLE photos(
-//   rest_id INT,
-//   link TEXT,
-//   FOREIGN KEY (rest_id) REFERENCES restaurants (id)
-// );
 
 // RUN SEED PROCESSES:
 if (cluster.isMaster) {

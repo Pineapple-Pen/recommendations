@@ -49,8 +49,14 @@ const makePhotoURLsforSingleRestaurant = (id) => {
   return { rest_id: id, photo_urls: urls };
 };
 
+const makeNearbyRelationsForSingleRestaurant = (id) => {
+  const nearby = _.range(0, 6).map(() => random.integer(10000000, 1));
+  return { rest_id: id, nearby_ids: nearby };
+};
+
 exports.restaurantTypes = restaurantTypes;
 exports.makeSingleRestaurant = makeSingleRestaurant;
 exports.makeSingleRestaurantTypes = makeSingleRestaurantTypes;
 exports.makePhotoURLsforSingleRestaurant = makePhotoURLsforSingleRestaurant;
+exports.makeNearbyRelationsForSingleRestaurant = makeNearbyRelationsForSingleRestaurant;
 

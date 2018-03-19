@@ -43,14 +43,14 @@ CREATE TABLE restaurant_types(
 -- join table for rest and rest (nearby)
 CREATE TABLE nearby(
   rest_id INT,
-  nearby_id INT,
-  FOREIGN KEY (rest_id) REFERENCES restaurants (id),
-  FOREIGN KEY (nearby_id) REFERENCES restaurants (id)
+  nearby_ids INT[],
+  FOREIGN KEY (rest_id) REFERENCES restaurants (id)
+  -- FOREIGN KEY (nearby_id) REFERENCES restaurants (id)
 );
 
 CREATE TABLE photos(
   rest_id INT,
-  photo_urls text[],
+  photo_urls TEXT[],
   FOREIGN KEY (rest_id) REFERENCES restaurants (id)
 );
 
