@@ -30,6 +30,8 @@ const makeSingleRestaurant = (id) => {
     rest_address: faker.fake('{{address.streetAddress}}, {{address.city}}, {{address.state}}, {{address.country}}'),
     website: faker.internet.url(),
     price_level: random.integer(4, 1),
+    latitude: faker.address.latitude,
+    longitude: faker.address.longitude,
   };
 
   return restaurantObj;

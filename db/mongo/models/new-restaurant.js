@@ -18,6 +18,8 @@ const restaurantSchema = mongoose.Schema({
   types: Array,
   // array of ids
   nearby: Array,
+  latitude: Number,
+  longitude: Number,
 });
 
 const RestaurantModel = mongoose.model('Restaurant', restaurantSchema);

@@ -89,6 +89,17 @@ const seedDb = async () => {
 
 
     // write to nearby table
+    const nearbyRelations = [];
+    for (let i = 0; i < size; i += 1) {
+      for (let j = 0; j < 5; j += 1) {
+        nearbyRelations.push({ rest_id: id, nearbyId: random.integer(9999999, 1)});
+      }
+      id += 1;
+    }
+    const nearbyRelationsQuery = pgp.helpers.insert(nearbyRelations, nearbyRelationsColumnSet);
+    await db.none(nearbyRelationsQuery)
+      .catch(err => console.log(err));
+
     const nearbyRelations = _.range(0, size).map(() => {
       id += 1;
       return gen.makeNearbyRelationsForSingleRestaurant(id - 1);

@@ -40,13 +40,15 @@ const generateDocument = (id) => {
     ],
     // array of ids
     nearby: [
-      random.integer(10000000, 1),
-      random.integer(10000000, 1),
-      random.integer(10000000, 1),
-      random.integer(10000000, 1),
-      random.integer(10000000, 1),
-      random.integer(10000000, 1),
+      random.integer(9999999, 1),
+      random.integer(9999999, 1),
+      random.integer(9999999, 1),
+      random.integer(9999999, 1),
+      random.integer(9999999, 1),
+      random.integer(9999999, 1),
     ],
+    latitude: faker.address.latitude,
+    longitude: faker.address.longitude,
   };
 
   return doc;

@@ -24,7 +24,9 @@ CREATE TABLE restaurants(
   neighborhood TEXT,
   rest_address TEXT,
   website TEXT,
-  price_level INT
+  price_level INT,
+  latitude NUMERIC,
+  longitude NUMERIC
 );
 
 CREATE TABLE types(
@@ -43,7 +45,7 @@ CREATE TABLE restaurant_types(
 -- join table for rest and rest (nearby)
 CREATE TABLE nearby(
   rest_id INT,
-  nearby_ids INT[]
+  nearby_id INT
   -- FOREIGN KEY (rest_id) REFERENCES restaurants (id)
   -- FOREIGN KEY (nearby_id) REFERENCES restaurants (id)
 );
