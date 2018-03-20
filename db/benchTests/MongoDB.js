@@ -16,15 +16,10 @@ MongoClient.connect(url, (err, client) => {
   const findOneResult = async (id) => {
     const start = Date.now();
     const doc = await collection.findOne({ place_id: id });
-    const docs = [];
-
-    for (let i = 0; i < doc.nearby.length; i += 1) {
-      const nearby = await collection.findOne({ place_id: doc.nearby[i] });
-      docs.push(nearby);
-    }
-
+    
+    const nearby = await collection.find({ place_id: {$in:doc.nearby} }).toArray();
     const end = Date.now();
-    console.log(`MongoClient found ${docs.length} nearby records for ID #${id} in ${end - start} ms`);
+    console.log(`MongoClient found ${nearby.length} nearby records for ID #${id} in ${end - start} ms`);
     return end - start;
   };
 
