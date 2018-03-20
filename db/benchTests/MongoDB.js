@@ -19,24 +19,26 @@ MongoClient.connect(url, (err, client) => {
     const doc = await collection.findOne({ place_id: id });
     const end = Date.now();
     console.log(`MongoClient found one ${typeof doc} in ${end - start} ms`);
+    return end - start;
   };
 
-  const findTen = async () => {
-    for (let i = 0; i < 10; i += 1) {
-      await findOne(random.integer(9999999, 1));
-      console.log('between tests ...');
+  const findMultiple = async (n) => {
+    let sum = 0;
+    for (let i = 0; i < n; i += 1) {
+      const add = await findOne(random.integer(9999999, 1));
+      sum += add;
     }
+    return sum / n;
   };
 
   const testSuite = async () => {
     try {
-      await findOne(random.integer(9999999, 1));
-      console.log('');
-
+      const n = 5000;
       const start = Date.now();
-      await findTen();
+      const average = await findMultiple(n);
       const end = Date.now();
-      console.log(`MongoClient found ten records in ${end - start} ms`);
+      console.log(`MongoClient found ${n} records in ${average} ms`);
+      console.log(`Test completed in ${end - start} ms`);
       process.exit();
     } catch (error) {
       console.error(error);
