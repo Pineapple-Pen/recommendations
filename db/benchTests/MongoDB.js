@@ -38,7 +38,7 @@ MongoClient.connect(url, (err, client) => {
       const average = await findMultiple(n);
       const end = Date.now();
       console.log(`MongoClient found ${n} records with average speed of ${average} ms per record`);
-      console.log(`Test completed in ${end - start / 1000} seconds`);
+      console.log(`Test completed in ${(end - start) / 1000} seconds`);
       process.exit();
     } catch (error) {
       console.error(error);
