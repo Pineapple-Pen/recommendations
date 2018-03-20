@@ -1,6 +1,5 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-await-in-loop */
-// const mongoose = require('mongoose');
 const { MongoClient } = require('mongodb');
 const random = require('random-ext');
 
