@@ -10,7 +10,7 @@ const numCPUs = require('os').cpus().length; // 2 on my machine
 const { db, pgp } = require('./db.js');
 const gen = require('./dataGeneration.js');
 
-const SEED_LIMIT = 100000;
+const SEED_LIMIT = 100;
 let id = process.env.forkID * (SEED_LIMIT / numCPUs);
 
 // CREATE TYPES TABLE - ONE TIME OPERATION
@@ -40,7 +40,7 @@ const seedDb = async () => {
   const nearbyRelationsColumnSet = new pgp.helpers.ColumnSet(['rest_id', 'nearby_id'], { table: 'nearby' });
 
   let count = parseInt((SEED_LIMIT / numCPUs), 10);
-  const size = 1000;
+  const size = 10;
 
   async function insertBulk() {
     // write restaurants

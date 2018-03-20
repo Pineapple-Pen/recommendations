@@ -13,18 +13,25 @@ MongoClient.connect(url, (err, client) => {
   const db = client.db('wegot');
   const collection = db.collection('restaurants');
 
-  const findOne = async (id) => {
+  const findOneResult = async (id) => {
     const start = Date.now();
     const doc = await collection.findOne({ place_id: id });
+    const docs = [];
+
+    for (let i = 0; i < doc.nearby.length; i += 1) {
+      const nearby = await collection.findOne({ place_id: doc.nearby[i] });
+      docs.push(nearby);
+    }
+
     const end = Date.now();
-    console.log(`MongoClient found one ${typeof doc} in ${end - start} ms`);
+    console.log(`MongoClient found ${docs.length} nearby records for ID #${id} in ${end - start} ms`);
     return end - start;
   };
 
   const findMultiple = async (n) => {
     let sum = 0;
     for (let i = 0; i < n; i += 1) {
-      const add = await findOne(random.integer(9999999, 1));
+      const add = await findOneResult(random.integer(9999999, 1));
       sum += add;
     }
     return sum / n;
@@ -36,7 +43,7 @@ MongoClient.connect(url, (err, client) => {
       const start = Date.now();
       const average = await findMultiple(n);
       const end = Date.now();
-      console.log(`MongoClient found ${n} records with average speed of ${average} ms per record`);
+      console.log(`MongoClient executed ${n} queries with average speed of ${average} ms per record`);
       console.log(`Test completed in ${(end - start) / 1000} seconds`);
       process.exit();
     } catch (error) {
