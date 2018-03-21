@@ -34,7 +34,7 @@ const populateTypesTable = () => {
 
 const seedDb = async () => {
   const start = process.hrtime();
-  const restaurantsColumnSet = new pgp.helpers.ColumnSet(['id', 'rest_name', 'google_rating', 'zagat_food_rating', 'review_count', 'short_description', 'neighborhood', 'rest_address', 'website', 'price_level'], { table: 'restaurants' });
+  const restaurantsColumnSet = new pgp.helpers.ColumnSet(['id', 'rest_name', 'google_rating', 'zagat_food_rating', 'review_count', 'short_description', 'neighborhood', 'rest_address', 'website', 'price_level', 'longitude', 'latitude'], { table: 'restaurants' });
   const restaurantTypesColumnSet = new pgp.helpers.ColumnSet(['rest_id', 'description_id'], { table: 'restaurant_types' });
   const photosColumnSet = new pgp.helpers.ColumnSet(['rest_id', 'photo_url'], { table: 'photos' });
   const nearbyRelationsColumnSet = new pgp.helpers.ColumnSet(['rest_id', 'nearby_id'], { table: 'nearby' });
