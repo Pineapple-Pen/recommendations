@@ -14,8 +14,8 @@ const findOne = async (id) => {
   const docs = [];
   for (let i = 0; i < (1 || nearbyids.length); i += 1) {
     const restaurant = await db.one(`SELECT * FROM restaurants WHERE id = ${nearbyids[i].nearby_id}`);
-    const photos = await db.any('SELECT * FROM photos WHERE rest_id = 78910;');
-    const types = await db.any('SELECT * FROM restaurant_types INNER JOIN types ON description_id = id WHERE rest_id = 78910;');
+    const photos = await db.any(`SELECT * FROM photos WHERE rest_id = ${nearbyids[i].nearby_id};`);
+    const types = await db.any(`SELECT * FROM restaurant_types INNER JOIN types ON description_id = id WHERE rest_id = ${nearbyids[i].nearby_id};`);
     docs.push({ info: restaurant, photos, types });
   }
   const end = Date.now();
