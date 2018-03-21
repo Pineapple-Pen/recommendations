@@ -4,19 +4,19 @@ const { db, pgp } = require('../postgres/db.js');
 
 // one that awaits n db.find
 
-// one that uses db.task 
+// one that uses db.task
 
 const findOne = async (id) => {
   const start = Date.now();
 
   const nearbyids = await db.any(`SELECT * FROM nearby WHERE rest_id = ${id}`);
-  
+
   const docs = [];
   for (let i = 0; i < (1 || nearbyids.length); i += 1) {
     const restaurant = await db.one(`SELECT * FROM restaurants WHERE id = ${nearbyids[i].nearby_id}`);
-    const photos = await db.any(`SELECT * FROM photos WHERE rest_id = 78910;`);
-    const types = await db.any(`SELECT * FROM restaurant_types INNER JOIN types ON description_id = id WHERE rest_id = 78910;`);
-    docs.push({info: restaurant, photos: photos, types: types})
+    const photos = await db.any('SELECT * FROM photos WHERE rest_id = 78910;');
+    const types = await db.any('SELECT * FROM restaurant_types INNER JOIN types ON description_id = id WHERE rest_id = 78910;');
+    docs.push({ info: restaurant, photos, types });
   }
   const end = Date.now();
   console.log(`PostgreSQL (via pg-promise) returned one ${typeof docs} in ${end - start} ms`);
