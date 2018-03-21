@@ -12,7 +12,7 @@ const findOne = async (id) => {
   const nearbyids = await db.any(`SELECT * FROM nearby WHERE rest_id = ${id}`);
 
   const docs = [];
-  for (let i = 0; i < (1 || nearbyids.length); i += 1) {
+  for (let i = 0; i < (nearbyids.length); i += 1) {
     const restaurant = await db.one(`SELECT * FROM restaurants WHERE id = ${nearbyids[i].nearby_id}`);
     const photos = await db.any(`SELECT * FROM photos WHERE rest_id = ${nearbyids[i].nearby_id};`);
     const types = await db.any(`SELECT * FROM restaurant_types INNER JOIN types ON description_id = id WHERE rest_id = ${nearbyids[i].nearby_id};`);
@@ -47,3 +47,10 @@ const testSuite = async () => {
 };
 
 testSuite();
+
+// for (let i = 0; i < (1 || nearbyids.length); i += 1) {
+//   const queries = `SELECT * FROM restaurants WHERE id = ${nearbyids[i].nearby_id}; SELECT * FROM photos WHERE rest_id = ${nearbyids[i].nearby_id}; SELECT * FROM restaurant_types INNER JOIN types ON description_id = id WHERE rest_id = ${nearbyids[i].nearby_id};`
+//   const result = await db.multi(queries);
+//   console.log(result);
+//   docs.push(result);
+// }
