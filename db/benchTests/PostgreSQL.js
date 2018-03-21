@@ -10,13 +10,14 @@ const findOne = async (id) => {
   const start = Date.now();
 
   const nearbyids = await db.any(`SELECT * FROM nearby WHERE rest_id = ${id}`);
-
+  const results = [];
   for (let i = 0; i < nearbyids.length; i += 1) {
-  const queries = `SELECT * FROM restaurants WHERE id = ${nearbyids[i].nearby_id}; SELECT * FROM photos WHERE rest_id = ${nearbyids[i].nearby_id}; SELECT * FROM restaurant_types INNER JOIN types ON description_id = id WHERE rest_id = ${nearbyids[i].nearby_id};`
-  const result = await db.multi(queries);
-}
+    const queries = `SELECT * FROM restaurants WHERE id = ${nearbyids[i].nearby_id}; SELECT * FROM photos WHERE rest_id = ${nearbyids[i].nearby_id}; SELECT * FROM restaurant_types INNER JOIN types ON description_id = id WHERE rest_id = ${nearbyids[i].nearby_id};`
+    const result = await db.multi(queries);
+    results.push(result);
+  }
   const end = Date.now();
-  console.log(`PostgreSQL (via pg-promise) returned one ${typeof docs} in ${end - start} ms`);
+  console.log(`PostgreSQL (via pg-promise) returned one ${typeof } in ${end - start} ms`);
   return end - start;
 };
 
