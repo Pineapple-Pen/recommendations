@@ -1,7 +1,5 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-await-in-loop */
-/* eslint-disable comma-dangle */
-
 const { MongoClient } = require('mongodb');
 const random = require('random-ext');
 
@@ -12,20 +10,13 @@ MongoClient.connect(url, (err, client) => {
     console.error(err);
   }
 
-  const db = client.db('wegot');
+  const db = client.db('wegotGEO');
   const collection = db.collection('restaurants');
 
   const findOneResult = async (id) => {
     const start = Date.now();
     const doc = await collection.findOne({ place_id: id });
-    const nearby = await collection.find({
-      location: {
-        $near: {
-          $geometry:
-          { type: 'Point', coordinates: doc.location.coordinates }
-        }
-      }
-    }).limit(6).toArray();
+    const nearby = await collection.find({ place_id: { $in: doc.nearby } }).toArray();
     const end = Date.now();
     console.log(`MongoClient found ${nearby.length} nearby records for ID #${id} in ${end - start} ms`);
     return end - start;

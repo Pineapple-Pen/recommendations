@@ -5,7 +5,7 @@ const cities = [
     name: 'San Francisco',
     state: 'CA',
     coordinates: ['37.7', '122.4'],
-  }, // SF
+  },
   {
     name: 'Houston',
     state: 'TX',
