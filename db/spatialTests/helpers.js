@@ -136,5 +136,3 @@ exports.cities = cities;
 exports.randomCoordinates = randomCoordinates;
 exports.randomType = randomType;
 
-// db.restaurants.createIndex( { location : "2dsphere" } )
-// db.restaurants.find({location: { $near: { $geometry: { type: "Point", coordinates: [122.4194, 37.7749] } } } })
