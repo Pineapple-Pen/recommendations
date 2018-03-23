@@ -13,11 +13,7 @@ CREATE DATABASE wegotgeo;
 -- connect
 \c wegotgeo; 
 
-CREATE SCHEMA postgis;
-CREATE EXTENSION PostGIS WITH SCHEMA postgis;
-GRANT ALL ON postgis.geometry_columns TO PUBLIC;
-GRANT ALL ON postgis.spatial_ref_sys TO PUBLIC;
--- ALTER DATABASE wegotgeo SET search_path TO public, postgis;
+CREATE EXTENSION postgis;
 
 CREATE TABLE restaurants(
   place_id INT NOT NULL,
@@ -34,5 +30,5 @@ CREATE TABLE restaurants(
   photo_1 TEXT,
   photo_2 TEXT,
   photo_3 TEXT,
-  geom POINT
+  geom geometry(POINT, 4326)
 );

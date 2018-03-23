@@ -24,6 +24,7 @@ const makeSingleRestaurant = (id) => {
     rest_address: `${faker.address.streetAddress()}, ${city.name}, ${city.state}`,
     website: faker.internet.url(),
     price_level: random.integer(4, 1),
+    rest_type: data.randomType(),
     photo_1: `https://picsum.photos/590/420?image=${random.integer(1000, 1)}`,
     photo_2: `https://picsum.photos/590/420?image=${random.integer(1000, 1)}`,
     photo_3: `https://picsum.photos/590/420?image=${random.integer(1000, 1)}`,
@@ -35,23 +36,23 @@ const makeSingleRestaurant = (id) => {
   return restaurantObj;
 };
 
-const SEED_LIMIT = 2;
+const SEED_LIMIT = 100000;
 let id = process.env.forkID * (SEED_LIMIT / numCPUs);
 
 const seedDb = async () => {
   const start = process.hrtime();
   const restaurantsColumnSet = new pgp.helpers.ColumnSet([
     'place_id', 'rest_name', 'google_rating', 'zagat_food_rating', 'review_count', 'short_description', 
-    'neighborhood', 'rest_address', 'website', 'price_level', 'photo_1', 'photo_2', 'photo_3',
+    'neighborhood', 'rest_address', 'website', 'price_level', 'rest_type', 'photo_1', 'photo_2', 'photo_3',
     {
       name: 'geom',
       mod: ':raw',
-      init: c => pgp.as.format('postgis.ST_GeomFromText(POINT(${lng}, ${lat}), 4326)', c.source)
+      init: c => pgp.as.format("ST_GeomFromText('POINT(${lng} ${lat})', 4326)", c.source)
     }
   ], { table: 'restaurants' });
 
   let count = parseInt((SEED_LIMIT / numCPUs), 10);
-  const size = 1;
+  const size = 1000;
 
   async function insertBulk() {
     // write restaurants
@@ -60,7 +61,6 @@ const seedDb = async () => {
       return makeSingleRestaurant(id - 1);
     });
     const restaurantQuery = pgp.helpers.insert(restaurants, restaurantsColumnSet);
-    console.log(restaurantQuery);
     await db.none(restaurantQuery)
       .catch(err => console.log(err));
 
