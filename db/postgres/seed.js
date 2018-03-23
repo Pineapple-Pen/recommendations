@@ -34,7 +34,7 @@ const makeSingleRestaurant = (id) => {
   return restaurantObj;
 };
 
-const SEED_LIMIT = 100000;
+const SEED_LIMIT = 10000000;
 let id = process.env.forkID * (SEED_LIMIT / numCPUs);
 
 const seedDb = async () => {

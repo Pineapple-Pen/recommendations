@@ -30,6 +30,7 @@
     "jquery": "^3.1.1",
     "mongodb": "^3.0.4",
     "mongoose": "^4.10.8",
+    "newrelic": "^3.2.0",
     "pg-promise": "^8.2.2",
     "ramda": "^0.25.0",
     "random-ext": "^2.6.1",

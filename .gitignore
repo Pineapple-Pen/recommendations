@@ -66,3 +66,6 @@ config.js
 
 #ds store 
 .DS_Store
+
+# New relic
+newrelic.js
