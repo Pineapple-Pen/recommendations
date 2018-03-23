@@ -3,18 +3,21 @@
 */
 
 -- terminate background users if any 
-REVOKE CONNECT ON DATABASE wegot FROM public;
 SELECT pid, pg_terminate_backend(pid) 
 FROM pg_stat_activity 
 WHERE datname = current_database() AND pid <> pg_backend_pid();
 
-DROP DATABASE IF EXISTS wegot;
+DROP DATABASE IF EXISTS wegotgeo;
 
-CREATE DATABASE wegot;
+CREATE DATABASE wegotgeo;
 -- connect
-\c wegot; 
+\c wegotgeo; 
 
-CREATE EXTENSION postgis;
+CREATE SCHEMA postgis;
+CREATE EXTENSION PostGIS WITH SCHEMA postgis;
+GRANT ALL ON postgis.geometry_columns TO PUBLIC;
+GRANT ALL ON postgis.spatial_ref_sys TO PUBLIC;
+-- ALTER DATABASE wegotgeo SET search_path TO public, postgis;
 
 CREATE TABLE restaurants(
   place_id INT NOT NULL,
@@ -30,13 +33,6 @@ CREATE TABLE restaurants(
   rest_type TEXT,
   photo_1 TEXT,
   photo_2 TEXT,
-  photo_3 TEXT
-);
-
--- join table for rest and rest (nearby)
-CREATE TABLE nearby(
-  rest_id INT,
-  nearby_id INT
-  -- FOREIGN KEY (rest_id) REFERENCES restaurants (id)
-  -- FOREIGN KEY (nearby_id) REFERENCES restaurants (id)
+  photo_3 TEXT,
+  geom POINT
 );

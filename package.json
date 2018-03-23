@@ -14,6 +14,7 @@
     "sdc-seed-mongo": "node ./db/mongo/seed-optimize-cpu.js",
     "sdc-init-postgres": "psql -h localhost -d postgres -p 5432 -a -q  -f ./db/postgres/INIT.sql",
     "sdc-seed-postgres": "node ./db/postgres/seed-pg.js",
+    "init-psql-geo": "psql -h localhost -d postgres -p 5432 -a -q  -f ./db/spatialTests/Postgres/init.sql",
     "test": "jest",
     "start": "node ./server/index.js",
     "dockertest": "npm run seed-database && npm start",
