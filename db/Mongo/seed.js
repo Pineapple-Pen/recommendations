@@ -1,4 +1,3 @@
-/* eslint-disable no-await-in-loop */
 const { MongoClient } = require('mongodb');
 const faker = require('faker');
 const random = require('random-ext');
@@ -6,10 +5,13 @@ const _ = require('ramda');
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 
-const SEED_LIMIT = 10000000;
+const data = require('../helpers.js');
 
-// FUNCTION DEFINITIONS:
+const SEED_LIMIT = 100000;
+
+// Function Definitions:
 const generateDocument = (id) => {
+  const city = data.cities[random.integer(data.cities.length - 1, 0)];
   const doc = {
     name: `${faker.random.words()} Cafe`,
     place_id: id,
@@ -21,34 +23,14 @@ const generateDocument = (id) => {
       `https://picsum.photos/590/420?image=${random.integer(1000, 1)}`,
       `https://picsum.photos/590/420?image=${random.integer(1000, 1)}`,
       `https://picsum.photos/590/420?image=${random.integer(1000, 1)}`,
-      `https://picsum.photos/590/420?image=${random.integer(1000, 1)}`,
-      `https://picsum.photos/590/420?image=${random.integer(1000, 1)}`,
     ],
     short_description: faker.lorem.sentences(),
     neighborhood: `${faker.name.lastName()} Hills`,
-    location: { lat: faker.address.latitude(), long: faker.address.longitude() },
-    address: faker.fake('{{address.streetAddress}}, {{address.city}}, {{address.state}}, {{address.country}}'),
+    address: `${faker.address.streetAddress()}, ${city.name}, ${city.state}`,
     website: faker.internet.url(),
     price_level: random.integer(4, 1),
-    // array of words
-    types: [
-      faker.commerce.product(),
-      faker.commerce.product(),
-      faker.commerce.product(),
-      faker.commerce.product(),
-      faker.commerce.product(),
-    ],
-    // array of ids
-    nearby: [
-      random.integer(9999999, 1),
-      random.integer(9999999, 1),
-      random.integer(9999999, 1),
-      random.integer(9999999, 1),
-      random.integer(9999999, 1),
-      random.integer(9999999, 1),
-    ],
-    latitude: faker.address.latitude,
-    longitude: faker.address.longitude,
+    type: data.randomType(),
+    location: { type: 'Point', coordinates: data.randomCoordinates(city.coordinates) },
   };
 
   return doc;
@@ -69,7 +51,7 @@ function seedDB() {
       console.error(err);
     }
     const start = process.hrtime();
-    const db = client.db('wegot');
+    const db = client.db('wegotGEO');
     const collection = db.collection('restaurants');
 
     let count = parseInt((SEED_LIMIT / numCPUs), 10);
@@ -93,7 +75,7 @@ function seedDB() {
   });
 }
 
-// RUN SEED PROCESSES:
+// Run seed processes:
 if (cluster.isMaster) {
   console.log(`Master process ${process.pid} is running`);
 

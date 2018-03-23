@@ -1,23 +1,13 @@
-/* eslint-disable no-await-in-loop */
 const random = require('random-ext');
-const { db, pgp } = require('../postgres/db.js');
-
-// one that awaits n db.find
-
-// one that uses db.task
+const { db } = require('./db.js');
 
 const findOne = async (id) => {
   const start = Date.now();
 
-  const nearbyids = await db.any(`SELECT * FROM nearby WHERE rest_id = ${id}`);
-  const results = [];
-  for (let i = 0; i < nearbyids.length; i += 1) {
-    const queries = `SELECT * FROM restaurants WHERE id = ${nearbyids[i].nearby_id}; SELECT * FROM photos WHERE rest_id = ${nearbyids[i].nearby_id}; SELECT * FROM restaurant_types INNER JOIN types ON description_id = id WHERE rest_id = ${nearbyids[i].nearby_id};`
-    const result = await db.multi(queries);
-    results.push(result);
-  }
+  const nearby = await db.any(`SELECT * FROM restaurants ORDER BY restaurants.geom <-> (SELECT geom FROM restaurants WHERE place_id = ${id}) LIMIT 6;`);
+
   const end = Date.now();
-  console.log(`PostgreSQL (via pg-promise) returned one ${typeof } in ${end - start} ms`);
+  console.log(`PostgreSQL (via pg-promise) returned one ${typeof nearby} in ${end - start} ms`);
   return end - start;
 };
 

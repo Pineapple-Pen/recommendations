@@ -1,5 +1,3 @@
-/* eslint-disable no-await-in-loop */
-/* eslint-disable max-len */
 const faker = require('faker');
 const random = require('random-ext');
 const _ = require('ramda');
@@ -42,7 +40,7 @@ let id = process.env.forkID * (SEED_LIMIT / numCPUs);
 const seedDb = async () => {
   const start = process.hrtime();
   const restaurantsColumnSet = new pgp.helpers.ColumnSet([
-    'place_id', 'rest_name', 'google_rating', 'zagat_food_rating', 'review_count', 'short_description', 
+    'place_id', 'rest_name', 'google_rating', 'zagat_food_rating', 'review_count', 'short_description',
     'neighborhood', 'rest_address', 'website', 'price_level', 'rest_type', 'photo_1', 'photo_2', 'photo_3',
     {
       name: 'geom',
@@ -76,7 +74,7 @@ const seedDb = async () => {
   insertBulk();
 };
 
-// RUN SEED PROCESSES:
+// Run seed processes:
 if (cluster.isMaster) {
   console.log(`Master process ${process.pid} is running`);
 

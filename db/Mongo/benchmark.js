@@ -1,6 +1,3 @@
-/* eslint-disable no-shadow */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable comma-dangle */
 const { MongoClient } = require('mongodb');
 const random = require('random-ext');
 
@@ -55,3 +52,9 @@ MongoClient.connect(url, (err, client) => {
 
   testSuite();
 });
+
+/*
+  Mongo:
+  db.restaurants.createIndex( { location : "2dsphere" } )
+  db.restaurants.find({location: { $near: { $geometry: { type: "Point", coordinates: [122.4194, 37.7749] } } } })
+*/
