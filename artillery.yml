@@ -15,9 +15,6 @@ config:
       arrivalRate: 40
       name: "Maximum Load"
   processor: "./server/stress-test/functions.js"
-  # defaults:
-  #   headers:
-  #     x-my-service-auth: '987401838271002188298567'
 scenarios:
   - name: "Go to cached ID"
     weight: 8

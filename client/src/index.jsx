@@ -28,6 +28,7 @@ class App extends React.Component {
       method: 'GET',
       success: (data) => {
         console.log('get success from client!', data);
+        data = JSON.parse(data);
         this.setState({
           restaurant: data[0],
           recommended: data.slice(1),
