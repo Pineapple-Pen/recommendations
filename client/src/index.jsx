@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import RestaurantCard from './components/RestaurantCard.jsx';
+import Title from './components/Title.jsx'
 import $ from 'jquery';
 import '../dist/styles.css';
 
@@ -27,9 +28,10 @@ class App extends React.Component {
       method: 'GET',
       success: (data) => {
         console.log('get success from client!', data);
+        data = JSON.parse(data);
         this.setState({
           restaurant: data[0],
-          recommended: data[1],
+          recommended: data.slice(1),
         });
       },
       error: (data) => {
@@ -46,7 +48,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <div className="recommendations-title">More Restaurants Near {this.state.restaurant ? this.state.restaurant.name : '...'}</div>
+        <Title name={this.state.restaurant ? this.state.restaurant.rest_name : null} />
         <div className="recommendations-container">
           {this.state.recommended.map((restaurant, index) => (
             <RestaurantCard restaurant={restaurant} key={index} switchRestaurant={this.goToRestaurant.bind(this)} />
