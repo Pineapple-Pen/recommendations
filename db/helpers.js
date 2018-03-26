@@ -4,110 +4,110 @@ const cities = [
   {
     name: 'San Francisco',
     state: 'CA',
-    coordinates: ['37.7', '122.4'],
+    coordinates: ['37.', '122.'],
   },
   {
     name: 'Houston',
     state: 'TX',
-    coordinates: ['29.7', '95.3'],
+    coordinates: ['29.', '95.'],
   },
   {
     name: 'Los Angeles',
     state: 'CA',
-    coordinates: ['34.0', '118.2'],
+    coordinates: ['34.', '118.'],
   },
   {
     name: 'Albuquerque',
     state: 'NM',
-    coordinates: ['35.0', '106.6504'],
+    coordinates: ['35.', '106.650'],
   },
   {
     name: 'New York name',
     state: 'NY',
-    coordinates: ['40.7', '74.0'],
+    coordinates: ['40.', '74.'],
   },
   {
     name: 'Chicago',
     state: 'IL',
-    coordinates: ['41.8', '87.6'],
+    coordinates: ['41.', '87.'],
   },
   {
     name: 'Mandan',
     state: 'ND',
-    coordinates: ['46.8', '100.8'],
+    coordinates: ['46.', '100.'],
   },
   {
     name: 'Mililani Town',
     state: 'HI',
-    coordinates: ['21.4', '158.0'],
+    coordinates: ['21.', '158.'],
   },
   {
     name: 'Baton Rouge',
     state: 'LA',
-    coordinates: ['30.4', '91.1'],
+    coordinates: ['30.', '91.'],
   },
   {
     name: 'Portland',
     state: 'OR',
-    coordinates: ['45.5', '122.6'],
+    coordinates: ['45.', '122.'],
   },
   {
     name: 'Austin',
     state: 'TX',
-    coordinates: ['30.2', '97.7'],
+    coordinates: ['30.', '97.'],
   },
   {
     name: 'Las Vegas',
     state: 'NV',
-    coordinates: ['36.1', '115.1'],
+    coordinates: ['36.', '115.'],
   },
   {
     name: 'Miami',
     state: 'FL',
-    coordinates: ['25.7', '80.1'],
+    coordinates: ['25.', '80.'],
   },
   {
     name: 'Denver',
     state: 'C0',
-    coordinates: ['39.7', '104.9'],
+    coordinates: ['39.', '104.'],
   },
   {
     name: 'San Diego',
     state: 'CA',
-    coordinates: ['32.7', '117.1'],
+    coordinates: ['32.', '117.'],
   },
   {
     name: 'Washington D.C.',
     state: '',
-    coordinates: ['38.9', '77.0'],
+    coordinates: ['38.', '77.'],
   },
   {
     name: 'Boston',
     state: 'MA',
-    coordinates: ['42.3', '71.0'],
+    coordinates: ['42.', '71.'],
   },
   {
     name: 'Philadelphia',
     state: 'PA',
-    coordinates: ['39.9', '75.1'],
+    coordinates: ['39.', '75.'],
   },
   {
     name: 'Baltimore',
     state: 'MD',
-    coordinates: ['39.2', '76.6'],
+    coordinates: ['39.', '76.'],
   },
   {
     name: 'Atlanta',
     state: 'GA',
-    coordinates: ['33.7', '84.3'],
+    coordinates: ['33.', '84.'],
   },
 ];
 
 const randomCoordinates = ([lat, long]) => {
   const coordinates = [];
 
-  const adjustLatitude = random.integer(999, 0);
-  const adjustLongitude = random.integer(999, 0);
+  const adjustLatitude = random.integer(9999, 0);
+  const adjustLongitude = random.integer(9999, 0);
 
   // Mongo expects [lng, lat]
   coordinates[1] = lat + adjustLatitude;
@@ -115,6 +115,9 @@ const randomCoordinates = ([lat, long]) => {
 
   return coordinates.map(str => parseFloat(str));
 };
+
+let test = randomCoordinates(cities[0].coordinates);
+console.log(test);
 
 const types = [
   'Bar',

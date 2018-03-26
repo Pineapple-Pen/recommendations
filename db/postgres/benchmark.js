@@ -4,7 +4,7 @@ const { db } = require('./db.js');
 const findOne = async (id) => {
   const start = Date.now();
 
-  const nearby = await db.any(`SELECT * FROM restaurants ORDER BY restaurants.geom <-> (SELECT geom FROM restaurants WHERE place_id = ${id}) LIMIT 6;`);
+  const nearby = await db.any(`SELECT * FROM restaurants ORDER BY restaurants.geom <-> (SELECT geom FROM restaurants WHERE place_id = ${id}) LIMIT 20;`);
 
   const end = Date.now();
   console.log(`PostgreSQL (via pg-promise) returned one ${typeof nearby} in ${end - start} ms`);
@@ -35,3 +35,7 @@ const testSuite = async () => {
 };
 
 testSuite();
+
+/* 
+  CREATE INDEX ON restaurants USING GIST (geom);
+*/

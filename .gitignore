@@ -69,3 +69,6 @@ config.js
 
 # New relic
 newrelic.js
+
+# redis dump
+dump.rdb
