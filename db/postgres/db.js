@@ -1,8 +1,9 @@
+require('dotenv').load();
 const pgp = require('pg-promise')({
   capSQL: true,
 });
 
-const connection = 'postgres://localhost:5432/wegotgeo';
+const connection = process.env.RECOMMENDATIONS_DB;
 
 const db = pgp(connection);
 

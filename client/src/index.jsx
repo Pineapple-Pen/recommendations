@@ -5,7 +5,7 @@ import Title from './components/Title.jsx'
 import $ from 'jquery';
 import '../dist/styles.css';
 
-class App extends React.Component {
+class Recommendations extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -19,8 +19,7 @@ class App extends React.Component {
   }
 
   getRecommendedRestaurants() {
-    console.log(window.location.href);
-    let id = window.location.href.split('/')[4] || 0;
+    let id = this.props.id || window.location.href.split('/')[4];
     console.log(`getting recommended restaurants for id: ${id}`);
 
     $.ajax({
@@ -59,4 +58,7 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('recommendations-app'));
+// if (document) {
+//   ReactDOM.render(<Recommendations />, document.getElementById('recommendations-app'));
+// }
+export default Recommendations;
