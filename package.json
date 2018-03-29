@@ -10,11 +10,10 @@
   "scripts": {
     "start": "nodemon ./server/index.js",
     "react-dev": "webpack -d --watch",
-    "fec-seed": "node seed.js",
     "seed-mongo": "node ./db/Mongo/seed.js",
     "init-postgres": "psql -h localhost -d postgres -p 5432 -a -q  -f ./db/Postgres/init.sql",
     "seed-postgres": "node ./db/Postgres/seed.js",
-    "build": "webpack -p --watch",
+    "build": "webpack -p",
     "test": "jest",
     "dockertest": "npm run seed-database && npm start",
     "docker": "DB_ADDRESS=database npm run seed-database && DB_ADDRESS=database npm start"
