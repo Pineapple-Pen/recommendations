@@ -58,7 +58,4 @@ class Recommendations extends React.Component {
   }
 }
 
-// if (document) {
-//   ReactDOM.render(<Recommendations />, document.getElementById('recommendations-app'));
-// }
 export default Recommendations;
