@@ -57,9 +57,10 @@ typings/
 # dotenv environment variables file
 .env
 
-#webpack bundle
+# webpack bundle
 client/dist/bundle.js
 client/dist/bundle.js.map
+client/dist/bundle-server.js
 
 #api key
 config.js

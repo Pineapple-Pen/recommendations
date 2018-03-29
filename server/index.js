@@ -17,7 +17,6 @@ const client = redis.createClient();
 const { db, getRecommendations } = require('../db/postgres/db.js');
 const quickSort = require('./quickSort');
 
-// const dbAddress = process.env.DB_ADDRESS || 'localhost';
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -50,7 +49,8 @@ app.get('/api/restaurants/:id/recommendations', (req, res) => {
       quickSort(recs, 'zagat_food_rating', 1, recs.length - 1);
       recs = recs.slice(0, 7);
       // cache for 1 hour
-      client.setex(id, 3600, JSON.stringify(recs), redis.print);
+      recs = JSON.stringify(recs);
+      client.setex(id, 3600, recs, redis.print);
       res.send(recs);
     })
     .catch((err) => {
