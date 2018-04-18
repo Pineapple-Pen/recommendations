@@ -14,10 +14,10 @@ PostgreSQL with PostGIS extension for geospatial querying.
 
 ## Getting Started
 ### Prerequisites
--npm
--node
--webpack
--PostgreSQL + PostGIS
+-npm  
+-node  
+-webpack  
+-PostgreSQL + PostGIS  
 
 ### Installation
 1. Install dependencies: `npm install`
