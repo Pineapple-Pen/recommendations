@@ -19,7 +19,7 @@ class Recommendations extends React.Component {
   }
 
   getRecommendedRestaurants() {
-    let id = this.props.id || window.location.href.split('/')[4];
+    let id = this.props.id || window.location.href.split('/')[4] || 0;
     console.log(`getting recommended restaurants for id: ${id}`);
 
     $.ajax({

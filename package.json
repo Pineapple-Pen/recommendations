@@ -8,15 +8,13 @@
     "node": ">=6.13.0"
   },
   "scripts": {
-    "start": "nodemon ./server/index.js",
+    "start": "node ./server/index.js",
+    "start-dev": "nodemon ./server/index.js",
     "react-dev": "webpack -d --watch",
     "seed-mongo": "node ./db/Mongo/seed.js",
     "init-postgres": "psql -h localhost -d postgres -p 5432 -a -q  -f ./db/Postgres/init.sql",
     "seed-postgres": "node ./db/Postgres/seed.js",
-    "build": "webpack -p",
-    "test": "jest",
-    "dockertest": "npm run seed-database && npm start",
-    "docker": "DB_ADDRESS=database npm run seed-database && DB_ADDRESS=database npm start"
+    "build": "webpack -p"
   },
   "dependencies": {
     "axios": "^0.18.0",
