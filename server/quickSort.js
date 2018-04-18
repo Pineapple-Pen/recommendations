@@ -29,6 +29,6 @@ const rotateValuesAroundPivot = (array, key, left, right, pivot) => {
   }
 
   return left;
-}
+};
 
 module.exports = quickSort;
